@@ -1,0 +1,33 @@
+====================================================================== 
+[A] DPO TRAINING SUMMARY
+file=/workspace/dpo_run/trainer_state.json  global_step=2387  epochs=2.9993714644877434
+logged train steps=2387  steps with NaN=0
+train means per epoch:
+  epoch 1: loss=0.4555  rewards/accuracies=0.8950  rewards/margins=0.7034  rewards/chosen=-0.0365  rewards/rejected=-0.7399  logps/chosen=-155.6699  logps/rejected=-209.7245  grad_norm=58.6537
+  epoch 2: loss=0.1753  rewards/accuracies=0.9924  rewards/margins=2.1407  rewards/chosen=-0.1807  rewards/rejected=-2.3214  logps/chosen=-157.0952  logps/rejected=-225.5995  grad_norm=23.2021
+  epoch 3: loss=0.1373  rewards/accuracies=0.9927  rewards/margins=2.5950  rewards/chosen=-0.2575  rewards/rejected=-2.8525  logps/chosen=-157.8316  logps/rejected=-230.8533  grad_norm=18.5415
+first 10 steps mean: loss=0.6908  rewards/accuracies=0.4375  rewards/margins=0.0065
+held-out evaluations:
+  epoch=0.000 step=0 loss=0.6931  rewards/accuracies=0.0000  rewards/margins=0.0000  rewards/chosen=0.0000  rewards/rejected=0.0000  logps/chosen=-101.8178  logps/rejected=-207.9336
+  epoch=1.000 step=796 loss=0.2279  rewards/accuracies=1.0000  rewards/margins=1.6817  rewards/chosen=-0.0967  rewards/rejected=-1.7784  logps/chosen=-102.7851  logps/rejected=-225.7174
+  epoch=2.000 step=1592 loss=0.1430  rewards/accuracies=1.0000  rewards/margins=2.5726  rewards/chosen=-0.2143  rewards/rejected=-2.7870  logps/chosen=-103.9611  logps/rejected=-235.8031
+  epoch=2.999 step=2387 loss=0.1335  rewards/accuracies=1.0000  rewards/margins=2.7259  rewards/chosen=-0.2309  rewards/rejected=-2.9568  logps/chosen=-104.1272  logps/rejected=-237.5017
+====================================================================== 
+[B] PAIRED McNEMAR TEST  SFT vs DPO (exact, two-sided)
+benchmark           n    SFT%    DPO%  SFTok-DPOx  SFTx-DPOok         p
+ARC-Easy         2376   74.37   74.71          20          28    0.3123
+ARC-Challenge    1172   49.66   50.43          10          19    0.1360
+HellaSwag       10042   68.91   69.19         109         137    0.0850
+MMLU            14042   65.10   65.25          86         106    0.1701
+WinoGrande       1267   65.90   65.43          64          58    0.6510
+GSM8K            1319   55.27   54.36         106          94    0.4368
+====================================================================== 
+[C] GSM8K GENERATED ANSWER LENGTH (words)
+SFT: n=1319 mean=113.5 median=121 p90=177 max=218
+DPO: n=1319 mean=108.4 median=115 p90=178 max=214
+====================================================================== 
+[D] OVERLAP: Orca-DPO pairs vs SlimOrca (SFT data)
+DPO pairs=12857  SlimOrca full=517982  SFT subset=5000
+vs SFT 5K subset : prompt overlap=79 (0.61%)  chosen overlap=467 (3.63%)
+vs full SlimOrca : prompt overlap=6652 (51.74%)  chosen overlap=5885 (45.77%)
+======================================================================

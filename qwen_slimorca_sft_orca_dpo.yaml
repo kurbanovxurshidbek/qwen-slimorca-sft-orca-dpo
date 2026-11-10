@@ -1,0 +1,127 @@
+# ============================================================
+# Model
+# ============================================================
+# Start from the SlimOrca SFT model.
+# Full fine-tuning (no LoRA): Axolotl also loads a frozen copy of this
+# model as the DPO reference model.
+
+base_model: kurbanovxurshidbek/qwen2.5-3b-slimorca-sft
+
+load_in_8bit: false
+load_in_4bit: false
+
+# ============================================================
+# DPO
+# ============================================================
+
+rl: dpo
+
+rl_beta: 0.1
+
+# ============================================================
+# Dataset
+# ============================================================
+
+datasets:
+  - path: train.jsonl
+    type: chat_template.default
+    field_messages: messages
+    field_chosen: chosen
+    field_rejected: rejected
+
+dataset_prepared_path: /root/preprocess
+
+val_set_size: 0.01
+
+output_dir: /root/outputs
+
+# ============================================================
+# Dataloader
+# ============================================================
+
+dataloader_num_workers: 16
+
+# ============================================================
+# Sequence / Attention
+# ============================================================
+
+sequence_len: 4096
+
+sample_packing: false
+eval_sample_packing: false
+pad_to_sequence_len: false
+
+attn_implementation: eager
+
+# ============================================================
+# Training
+# ============================================================
+# Effective batch = 8 x 2 = 16 (same as SFT: 16 x 1).
+# Each DPO example is a pair (chosen + rejected) and a reference
+# model is also in memory, so micro-batch is halved vs SFT.
+# DPO uses a much lower learning rate than SFT (2e-5 would damage the model).
+
+micro_batch_size: 4
+gradient_accumulation_steps: 4
+num_epochs: 3
+
+optimizer: adamw_torch_fused
+
+lr_scheduler: cosine
+
+learning_rate: 5e-7
+
+warmup_ratio: 0.1
+
+weight_decay: 0.0
+
+# ============================================================
+# Precision
+# ============================================================
+
+bf16: true
+
+tf32: true
+
+# ============================================================
+# Memory Optimization
+# ============================================================
+
+gradient_checkpointing: true
+
+# ============================================================
+# Logging
+# ============================================================
+
+logging_steps: 1
+
+evals_per_epoch: 1
+
+saves_per_epoch: 1
+
+# Save only model weights in checkpoints (no optimizer states):
+# ~6 GB per checkpoint instead of ~30 GB — 3 checkpoints fit easily on disk.
+save_only_model: true
+
+# ============================================================
+# Weights & Biases
+# ============================================================
+
+wandb_project: qwen2.5-dpo
+
+wandb_entity: infocuslabs
+
+wandb_watch: "false"
+
+wandb_name: qwen2.5-3b-slimorca-sft-orca-dpo
+
+wandb_log_model: "false"
+
+# ============================================================
+# Hugging Face Hub
+# ============================================================
+# New repo — do NOT use the SFT repo id here, or the SFT model gets overwritten.
+
+hub_model_id: kurbanovxurshidbek/qwen2.5-3b-slimorca-sft-orca-dpo
+
+hub_strategy: end
